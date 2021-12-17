@@ -24,6 +24,10 @@ app.get("/editJourney.html", (req, res)=> {
     res.sendFile(path.join(__dirname,"editJourney.html"));
 })
 
+app.get("/stylesheet.css", (req, res)=> {
+    res.sendFile(path.join(__dirname,"stylesheet.css"));
+})
+
 app.listen(port, ()=>{
     const bla = 5;
     console.log(`Example app is listening on port http://localhost:${port}`);
