@@ -1,15 +1,27 @@
 const express = require("express");
 const path = require('path');
 const app = express();
-const importData = require("./data.json");
+
 let port = process.env.PORT || 3000;
 
 app.get("/", (req, res)=> {
     res.sendFile(path.join(__dirname,"index.html"));
 })
 
-app.get("/players", (req, res) =>{
-    res.send(importData);
+app.get("/map.html", (req, res)=> {
+    res.sendFile(path.join(__dirname,"map.html"));
+})
+
+app.get("/countries.html", (req, res)=> {
+    res.sendFile(path.join(__dirname,"countries.html"));
+})
+
+app.get("/createJourney.html", (req, res)=> {
+    res.sendFile(path.join(__dirname,"createJourney.html"));
+})
+
+app.get("/editJourney.html", (req, res)=> {
+    res.sendFile(path.join(__dirname,"editJourney.html"));
 })
 
 app.listen(port, ()=>{
