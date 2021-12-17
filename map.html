@@ -1,0 +1,76 @@
+<!Doctype html>
+<html>
+  <head>
+    <title>map</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  </head>
+  <body>
+    <header>
+      <img src="https://bowiebearsnews.com/wp-content/uploads/2018/11/TRavel.png" width="100" height="100" alt="">
+    </header>
+    <nav>
+      <ul>
+        <li>
+          <a href="map.html">Map</a>
+        </li>
+        <li>
+          <a href="createJourney.html">Manage</a>
+        </li>
+        <li>
+          <button>Log out</button>
+        </li>
+      </ul>
+    </nav>
+    <div class="placeholder1">placeholder</div>
+    <div class="placeholder2">placeholder</div>
+    <main>
+      <h1>Uebersicht Reisen</h1>
+      <div id="map"></div>
+    </main>
+    <footer>copyright bla und keks</footer>
+    <script>
+      document.querySelector("button").addEventListener('click', (event) => {
+        window.location.replace('https://wizardly-poincare-1df917.netlify.app');
+      });
+    </script>
+    <script>
+      var map = L.map('map').setView([52.5, 13.5], 4);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png', {
+        maxZoom: 20,
+        minZoom: 2,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
+
+      const vis = [];
+
+      var i;
+
+      for (i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+        const reise = JSON.parse(value);
+        console.log(reise);
+        vis.push(reise.land);
+      }
+
+      const getGeoJson = async () => {
+        const data = await fetch("https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_110m_admin_0_countries.geojson");
+        return await data.json();
+      }
+
+      const displayData = async () => {
+        const geoJson = await getGeoJson();
+        const filteredData = {
+          ...geoJson,
+          features: geoJson.features.filter(feature =>
+            !vis.includes(feature.properties.iso_a2))
+        };
+        L.geoJson(filteredData).addTo(map);
+      }
+      displayData();
+    </script>
+  </body>
+</html>

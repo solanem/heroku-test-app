@@ -1,0 +1,106 @@
+body {
+    display: grid;
+    grid-template-columns: 0.4fr 2.2fr 0.4fr;
+    grid-template-rows: 0.3fr 0.3fr 2.9fr 0.5fr;
+    gap: 0px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+    "header header header"
+    "navbar navbar navbar"
+    "placeholder1 main placeholder2"
+    "footer footer footer";
+    font-style: italic;
+}
+
+header {
+    grid-area: header;
+    background: #ffbf00;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+nav {
+    grid-area: navbar;
+    background: #8045d3;
+}
+
+nav li{
+    display: inline;
+    margin: 5px;
+    padding: 5px;
+}
+
+footer {
+    grid-area: footer;
+    background: #8045d3;
+    text-align: center;
+    padding-top: 15px;
+}
+
+.placeholder1 { grid-area: placeholder1; }
+
+.placeholder2 { grid-area: placeholder2; }
+
+main {
+    grid-area: main;
+    background: #ffbf00;
+}
+
+main ul li {
+    border: 1px solid black;
+}
+
+main button{
+    margin-top: 10px;
+}
+
+#map {
+  height: 90vh;
+  width: 80vw;
+  border: 10px;
+}
+
+iframe {
+border: 0px;
+height: 30px;
+}
+
+body > * {
+    /*border:1px solid black;*/
+    text-align: center;
+
+}
+
+nav a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #ffbf00;
+}
+
+nav a:hover {
+    color: red;
+}
+
+.journey {
+    border-radius: 5px;
+    margin-left: 90px;
+    margin-right: 90px;
+}
+
+.journeyList {
+    list-style: none;
+}
+
+.journeyList * {
+    margin-left: 10px;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+.journeyList li {
+    margin: 5px;
+}
+
+.journeyList .reisename {
+    width: 100px;
+}

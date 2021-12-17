@@ -1,0 +1,197 @@
+<!Doctype html>
+<html>
+
+  <head>
+    <title>create journey</title>
+    <link rel="stylesheet" href="stylesheet.css">
+  </head>
+
+  <body>
+    <header>
+      <img src="https://bowiebearsnews.com/wp-content/uploads/2018/11/TRavel.png" width="100" height="100" alt="">
+    </header>
+    <nav>
+      <ul>
+        <li>
+          <a href="map.html">Map</a>
+        </li>
+        <li>
+          <a href="createJourney.html">Manage</a>
+        </li>
+        <li>
+          <button>Log out</button>
+        </li>
+      </ul>
+    </nav>
+    <div class="placeholder1">placeholder</div>
+    <div class="placeholder2">placeholder</div>
+    <main>
+      <h1>Manage Journeys</h1>
+      <div>
+        <label for="reiseName">Reise Name</label>
+        <input type="text" id="reiseName" required>
+      </div>
+      <div>
+        <label for="startDatum">Start Datum</label>
+        <input type="date" id="startDatum" required>
+      </div>
+      <div>
+        <label for="endDatum">End Datum</label>
+        <input type="date" id="endDatum" required>
+      </div>
+      <div>
+        <iframe src="countries.html"></iframe>
+      </div>
+      <button>Create Journey</button>
+    </main>
+    <footer>copyright bla und keks</footer>
+    <script>
+      const nav = document.querySelector("nav");
+      const btn = nav.querySelector("button");
+      btn.addEventListener('click', (event) => {
+        window.location.replace('https://wizardly-poincare-1df917.netlify.app');
+      })
+
+    </script>
+    <script>
+      const main = document.querySelector("main");
+      const creator = main.querySelector("button");
+      const frame = document.querySelector("iframe");
+      
+      window.addEventListener('DOMContentLoaded', (event) => {
+        for (i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          const value = localStorage.getItem(key);
+          displayReise(JSON.parse(value));
+        }
+      });
+
+      // from https://stackoverflow.com/posts/6178341/revisions
+      function checkDate(date) {
+
+        if (!/^\d{4}\-\d{2}\-\d{2}$/.test(date))
+          return false;
+
+        var parts = date.split("-");
+        var day = parseInt(parts[2], 10);
+        var month = parseInt(parts[1], 10);
+        var year = parseInt(parts[0], 10);
+
+        // Check the ranges of month and year
+        if (year < 1000 || year > 3000 || month == 0 || month > 12)
+          return false;
+
+        var monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+        // Adjust for leap years
+        if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+          monthLength[1] = 29;
+
+        // Check the range of the day
+        return day > 0 && day <= monthLength[month - 1];
+      }
+
+      function compareDate(date1, date2) {
+        if (checkDate(date1) && checkDate(date2)) {
+          var parts1 = date1.split("-");
+          var parts2 = date2.split("-");
+          var year1 = parseInt(parts1[0], 10);
+          var year2 = parseInt(parts2[0], 10);
+          if (year1 > year2) return false;
+          if (year1 < year2) return true;
+          var month1 = parseInt(parts1[1], 10);
+          var month2 = parseInt(parts2[1], 10);
+          if (month1 > month2) return false;
+          if (month1 < month2) return true;
+          var day1 = parseInt(parts1[2], 10);
+          var day2 = parseInt(parts2[2], 10);
+          if (day1 > day2) return false;
+          return true;
+        }
+      }
+        
+      function Reise(name, land, start, end, id) {
+        this.name = name;
+        this.land = land;
+        this.start = start;
+        this.end = end;
+        this.id = id;
+      }
+
+      function store(r) {
+        key = Math.random().toString(36).substr(2, 5)
+        localStorage.setItem(key, JSON.stringify(r));
+        return localStorage.getItem(key);
+      }
+      
+      function remover(r) {
+        for (var i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          const value = localStorage.getItem(key);
+          const storedIds = JSON.parse(value).id;
+          if (storedIds == r.id) {
+            localStorage.removeItem(key);
+          }
+        }
+      }
+      
+      function editor(r) {
+        creator.innerHTML = "Edit Journey";
+        for (var i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          const value = localStorage.getItem(key);
+          const storedIds = JSON.parse(value).id;
+          if (storedIds == r.id) {
+            main.querySelector("#reiseName").value = r.name;
+            frame.contentWindow.document.querySelector("select").value = r.land;
+            main.querySelector("#startDatum").value = r.start;
+            main.querySelector("#endDatum").value = r.end;
+            remover(r);
+          }
+        }
+      }
+      
+      function displayReise(r) {
+        if (r.name !== "" && compareDate(r.start, r.end) && r.land !== "") {
+          var jHouse = document.createElement("div");
+          jHouse.className = "journey";
+          jHouse.style.border = "thin solid";
+          var jData = document.createElement("p");
+          var editButton = document.createElement("button");
+          editButton.innerHTML = "edit journey";
+          editButton.onclick = function() {
+            editor(r);
+          }
+          var deleteButton = document.createElement("button");
+          deleteButton.innerHTML = "delete";
+          deleteButton.onclick = function() {
+            remover(r);
+            window.location.reload();
+          }
+          jData.innerText = r.name + ' \n nach: ' + r.land + ' \n von: ' + r.start + ' \n bis: ' + r.end + '.';
+          jHouse.append(jData);
+          jHouse.append(editButton);
+          jHouse.append(deleteButton);
+          main.append(jHouse);
+        }
+      }
+
+      creator.addEventListener('click', (event) => {
+          var name = main.querySelector("#reiseName").value;
+          var country = frame.contentWindow.document.querySelector("select").value;
+          var start = main.querySelector("#startDatum").value;
+          var end = main.querySelector("#endDatum").value;
+          var id = Math.floor(Math.random() * 500);
+          
+          const trip = new Reise(name, country, start, end, id);
+          const savedTrip = store(trip);
+          displayReise(JSON.parse(savedTrip));
+
+          window.location.reload();
+      });
+
+    </script>
+  </body>
+
+</html>
+
