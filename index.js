@@ -2,7 +2,7 @@ const express = require("express");
 const path = require('path');
 const app = express();
 
-let port = process.env.PORT || 80;
+let port = process.env.NODE_ENV === 'production' ? 'https://nodereiseapp.herokuapp.com/' : 'http://localhost:5000/api';
 
 app.get("/", (req, res)=> {
     res.sendFile(path.join(__dirname,"index.html"));
