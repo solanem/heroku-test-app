@@ -2,7 +2,7 @@ const express = require("express");
 const path = require('path');
 const app = express();
 
-let port = https://nodereiseapp.herokuapp.com/;
+let port = 'https://nodereiseapp.herokuapp.com/';
 
 app.get("/", (req, res)=> {
     res.sendFile(path.join(__dirname,"index.html"));
